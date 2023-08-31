@@ -1,0 +1,23 @@
+{
+  "name": "mathway-api",
+  "version": "0.0.1",
+  "description": "Node.js package that provides an unofficial API for MathWay",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/misqlight/mathway-api.git"
+  },
+  "keywords": [
+    "mathway",
+    "api"
+  ],
+  "author": "misqlight",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/misqlight/mathway-api/issues"
+  },
+  "homepage": "https://github.com/misqlight/mathway-api#readme"
+}
