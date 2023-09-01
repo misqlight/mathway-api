@@ -13,3 +13,26 @@ async function sendRequest(options, data) {
         req.end();
     });
 }
+
+async function submit(expression, subject, language) {
+    return new Promise(async (resolve, reject) => {
+        const body = {
+            metadata: {
+                route: language
+            },
+            asciiMath: expression,
+            subject
+        }
+
+        const response = await sendRequest({
+            method: "POST",
+            hostname: "www.mathway.com",
+            path: "/chat/editor",
+            headers: { "Content-Type": "application/json" }            
+        }, JSON.stringify(body));
+
+        resolve(response);
+    });
+}
+
+module.exports.submit = submit;
