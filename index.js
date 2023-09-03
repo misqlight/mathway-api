@@ -3,10 +3,16 @@ const http = require('node:https');
 /** @typedef {"BasicMath"|"prealgebra"|"algebra"|"trigonometry"|"precalculus"|"calculus"|"statistics"|"finitemath"|"linearalgebra"|"chemistry"|"physics"} Subject */
 
 /**
+ * @callback getResultByTopicFunction
+ * @returns {Promise<MessagesResponse>}
+ */
+
+/**
  * @typedef {object} Topic
  * @property {number} id - Unique ID of the topic
  * @property {number} score - Number from 0 to 1. Probability that this topic was meant
  * @property {string} text - Topic text
+ * @property {getResultByTopicFunction} getResult - Function to get result by this topic
  */
 
 /**
@@ -20,7 +26,6 @@ const http = require('node:https');
  * @typedef {object} TopicsResponse
  * @property {"topicsResponse"} type - Response type
  * @property {Topic[]} topics - Array of suggested topics
- * 
 */
 
 /**
@@ -88,7 +93,8 @@ async function submit(expression, subject, language) {
                 return {
                     id: topic.Id,
                     score: topic.Score,
-                    text: topic.Text
+                    text: topic.Text,
+                    getResult: () => getTopicResult(expression, subject, topic.Id, language),
                 }
             });
         }
@@ -97,4 +103,45 @@ async function submit(expression, subject, language) {
     });
 }
 
+/**
+ * Return an result for the expression related to the topic
+ * 
+ * @public
+ * @param {string} expression - Expression to submit (in LaTeX)
+ * @param {Subject} subject - Answers subject
+ * @param {string|number} topicId - ID of the topic
+ * @param {string} [language] - 2-letter code of answers language
+ * @returns {Promise<MessagesResponse>}
+*/
+async function getTopicResult(expression, subject, topicId, language) {
+    return new Promise(async (resolve, reject) => {
+        const body = {
+            metadata: { route: language },
+            asciiMath: expression,
+            subject,
+            topicId: Number(topicId),
+        }
+
+        const response = await sendRequest({
+            method: "POST",
+            hostname: "www.mathway.com",
+            path: "/chat/topics",
+            headers: { "Content-Type": "application/json" },
+        }, JSON.stringify(body));
+
+        const result = { type: response.type }
+
+        result.messages = response.messages.map(msg => {
+            return {
+                content: msg.content,
+                genre: msg.genre,
+                timestamp: msg.timestamp,
+            }
+        });
+
+        resolve(result);
+    });
+}
+
 module.exports.submit = submit;
+module.exports.getTopicResult = getTopicResult;
