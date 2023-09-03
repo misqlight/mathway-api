@@ -10,7 +10,7 @@ const http = require('node:https');
 /**
  * @typedef {object} Topic
  * @property {number} id - Unique ID of the topic
- * @property {number} score - Number from 0 to 1. Probability that this topic was meant
+ * @property {number} score - Number between 0 and 1. Probability that this topic was meant
  * @property {string} text - Topic text
  * @property {getResultByTopicFunction} getResult - Function to get result by this topic
  */
@@ -18,7 +18,7 @@ const http = require('node:https');
 /**
  * @typedef {object} Message
  * @property {string} content - Content of the message (with HTML tags)
- * @property {"mathway"|"message"|"autoresolve"|"greeting"} genre - Genre/Type of the message
+ * @property {"mathway"|"message"|"autoresolve"|"greeting"|"rating"} genre - Genre/Type of the message
  * @property {number} timestamp - Timestamp of the message
  */
 
