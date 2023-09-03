@@ -68,10 +68,32 @@ async function submit(expression, subject, language) {
             method: "POST",
             hostname: "www.mathway.com",
             path: "/chat/editor",
-            headers: { "Content-Type": "application/json" }            
+            headers: { "Content-Type": "application/json" }
         }, JSON.stringify(body));
 
-        resolve(response);
+        const result = { type: response.type }
+
+        if (response.messages) {
+            result.messages = response.messages.map(msg => {
+                return {
+                    content: msg.content,
+                    genre: msg.genre,
+                    timestamp: msg.timestamp
+                }
+            });
+        }
+
+        if (response.topics) {
+            result.topics = response.topics.map(topic => {
+                return {
+                    id: topic.Id,
+                    score: topic.Score,
+                    text: topic.Text
+                }
+            });
+        }
+
+        resolve(result);
     });
 }
 
