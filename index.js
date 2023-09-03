@@ -12,6 +12,8 @@ const http = require('node:https');
  * @property {number} id - Unique ID of the topic
  * @property {number} score - Number between 0 and 1. Probability that this topic was meant
  * @property {string} text - Topic text
+ * @property {object} customData - Custom topic data
+ * @property {string} [customData.variable] - Name of the variable to act with
  * @property {getResultByTopicFunction} getResult - Function to get result by this topic
  */
 
@@ -94,7 +96,8 @@ async function submit(expression, subject, language) {
                     id: topic.Id,
                     score: topic.Score,
                     text: topic.Text,
-                    getResult: () => getTopicResult(expression, subject, topic.Id, language),
+                    customData: { variable: topic.CustomData.VAR },
+                    getResult: () => getTopicResult(expression, subject, topic.Id, { variable: topic.CustomData.VAR }, language),
                 }
             });
         }
@@ -110,16 +113,21 @@ async function submit(expression, subject, language) {
  * @param {string} expression - Expression to submit (in LaTeX)
  * @param {Subject} subject - Answers subject
  * @param {string|number} topicId - ID of the topic
+ * @param {object} [customData] - Custom topic data
+ * @param {string} [customData.variable] - Name of the variable to act with
  * @param {string} [language] - 2-letter code of answers language
  * @returns {Promise<MessagesResponse>}
 */
-async function getTopicResult(expression, subject, topicId, language) {
+async function getTopicResult(expression, subject, topicId, customData, language) {
     return new Promise(async (resolve, reject) => {
         const body = {
             metadata: { route: language },
             asciiMath: expression,
             subject,
             topicId: Number(topicId),
+            CustomData: {
+                VAR: customData?.variable
+            },
         }
 
         const response = await sendRequest({

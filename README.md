@@ -29,6 +29,7 @@ Get an MessagesResponse result for given topic manually. Arguments:
 - `expression` - Expression to submit (in LaTeX format)
 - `subject` - Answers subject (See all subjects list below)
 - `topicId` - ID of the topic
+- `customData` - Optional, Object. Custom topic data (e.g. `variable` to specify what variable to act with)
 - `language` - Optional, 2-letter code of answers language (See supported languages list below)
 
 Return value is a `MessagesResponse` object
@@ -75,6 +76,7 @@ console.log((await mathway.greet('precalculus', 'es')).messages[0].content);
 - `score` - Number. Number between 0 and 1. Probability that this topic was meant.
 - `text` - String. Topic text.
 - function `getResult` - shorthand for `getTopicResult` call with current topic. Just use `getResult()` instead of `getTopicResult(expression, subject, topicId, language)`.
+- `customData` - Optional, Object. Custom topic data (e.g. `variable` to specify what variable to act with)
 
 ### Supported subjects
 - `BasicMath`
