@@ -143,5 +143,42 @@ async function getTopicResult(expression, subject, topicId, language) {
     });
 }
 
+/**
+ * Sends greeting request to MathWay
+ * 
+ * @public
+ * @param {Subject} subject - Answers subject
+ * @param {string} [language] - 2-letter code of answers language
+ * @returns {Promise<MessagesResponse>}
+ */
+async function greet(subject, language) {
+    return new Promise(async (resolve, reject) => {
+        const body = {
+            metadata: { route: language },
+            subject,
+        }
+
+        const response = await sendRequest({
+            method: "POST",
+            hostname: "www.mathway.com",
+            path: "/chat/greeting",
+            headers: { "Content-Type": "application/json" },
+        }, JSON.stringify(body));
+
+        const result = { type: response.type }
+
+        result.messages = response.messages.map(msg => {
+            return {
+                content: msg.content,
+                genre: msg.genre,
+                timestamp: msg.timestamp,
+            }
+        });
+
+        resolve(result);
+    });
+}
+
 module.exports.submit = submit;
 module.exports.getTopicResult = getTopicResult;
+module.exports.greet = greet;
