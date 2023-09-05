@@ -10,13 +10,14 @@ const mathway = require("mathway-api");
 Submit an expression to MathWay and return the response. Arguments:
 - `expression` - Expression to submit (in LaTeX format)
 - `subject` - Answers subject (See all subjects list below)
-- `language` - Optional, 2-letter code of answers language (See supported languages list below)
+- `options` - Optional, submit options
+  - `language` - 2-letter code of answers language (See supported languages list below)
 
 Return value is a `MessagesResponse` or `TopicsResponse` object
 
 Example:
 ```javascript
-mathway.submit('\\sqrt(16) + x = 5', 'algebra', 'en').then(answer => {
+mathway.submit('\\sqrt(16) + x = 5', 'algebra', { language: 'en' }).then(answer => {
     if (answer.type === `topicsResponse`) { // Checking if the answer is TopicsResponse
         answer.topics[0].getResult().then(result => { // Getting MessagesResponse by the first topic
             console.log(result.messages[0].content); // Log content of the first message
@@ -29,8 +30,10 @@ Get an MessagesResponse result for given topic manually. Arguments:
 - `expression` - Expression to submit (in LaTeX format)
 - `subject` - Answers subject (See all subjects list below)
 - `topicId` - ID of the topic
-- `customData` - Optional, Object. Custom topic data (e.g. `variable` to specify what variable to act with)
-- `language` - Optional, 2-letter code of answers language (See supported languages list below)
+- `options` - Optional, submit options
+  - `language` - 2-letter code of answers language (See supported languages list below)
+  - `customData` - Custom topic data
+    - `variable` - Variable to act with
 
 Return value is a `MessagesResponse` object
 
@@ -43,13 +46,14 @@ const answer = await mathway.getTopicResult('x + 1 = 2', 'algebra', topicId);
 ### function `greet`
 Sends greeting request to MathWay. Arguments:
 - `subject` - Answers subject (See all subjects list below)
-- `language` - Optional, 2-letter code of answers language (See supported languages list below)
+- `options` - Optional, submit options
+  - `language` - 2-letter code of answers language (See supported languages list below)
 
 Return value is a `MessagesResponse` object
 
 Example:
 ```javascript
-console.log((await mathway.greet('precalculus', 'es')).messages[0].content);
+console.log((await mathway.greet('precalculus', { language: 'es' })).messages[0].content);
 // Output is: ¿Cómo puedo ayudarte?
 ```
 

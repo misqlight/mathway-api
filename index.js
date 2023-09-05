@@ -38,6 +38,11 @@ const http = require('node:https');
 
 /** @typedef {TopicsResponse|MessagesResponse} MathwayResponse */
 
+/**
+ * @typedef {object} CustomData
+ * @property {string} [variable] - Name of the variable to act with
+ */
+
 /** @param {http.RequestOptions} options */
 async function sendRequest(options, data) {
     return new Promise((resolve, reject) => {
@@ -58,15 +63,14 @@ async function sendRequest(options, data) {
  * @public
  * @param {string} expression - Expression to submit (in LaTeX)
  * @param {Subject} subject - Answers subject
- * @param {string} [language] - 2-letter code of answers language
+ * @param {object} [options] - Options
+ * @param {string} [options.language] - 2-letter code of answers language
  * @returns {Promise<MathwayResponse>}
 */
-async function submit(expression, subject, language) {
+async function submit(expression, subject, options = {}) {
     return new Promise(async (resolve, reject) => {
         const body = {
-            metadata: {
-                route: language
-            },
+            metadata: { route: options?.language },
             asciiMath: expression,
             subject
         }
@@ -97,7 +101,7 @@ async function submit(expression, subject, language) {
                     score: topic.Score,
                     text: topic.Text,
                     customData: { variable: topic.CustomData.VAR },
-                    getResult: () => getTopicResult(expression, subject, topic.Id, { variable: topic.CustomData.VAR }, language),
+                    getResult: () => getTopicResult(expression, subject, topic.Id, { customData: { variable: topic.CustomData.VAR }, language }),
                 }
             });
         }
@@ -113,21 +117,19 @@ async function submit(expression, subject, language) {
  * @param {string} expression - Expression to submit (in LaTeX)
  * @param {Subject} subject - Answers subject
  * @param {string|number} topicId - ID of the topic
- * @param {object} [customData] - Custom topic data
- * @param {string} [customData.variable] - Name of the variable to act with
- * @param {string} [language] - 2-letter code of answers language
+ * @param {object} [options] - Options
+ * @param {CustomData} [options.customData] - Custom topic data
+ * @param {string} [options.language] - 2-letter code of answers language
  * @returns {Promise<MessagesResponse>}
 */
-async function getTopicResult(expression, subject, topicId, customData, language) {
+async function getTopicResult(expression, subject, topicId, options = {}) {
     return new Promise(async (resolve, reject) => {
         const body = {
-            metadata: { route: language },
+            metadata: { route: options?.language },
             asciiMath: expression,
             subject,
             topicId: Number(topicId),
-            CustomData: {
-                VAR: customData?.variable
-            },
+            CustomData: { VAR: options?.customData?.variable },
         }
 
         const response = await sendRequest({
@@ -157,12 +159,14 @@ async function getTopicResult(expression, subject, topicId, customData, language
  * @public
  * @param {Subject} subject - Answers subject
  * @param {string} [language] - 2-letter code of answers language
+ * @param {object} [options] - Options
+ * @param {string} [options.language] - 2-letter code of answers language
  * @returns {Promise<MessagesResponse>}
  */
-async function greet(subject, language) {
+async function greet(subject, options = {}) {
     return new Promise(async (resolve, reject) => {
         const body = {
-            metadata: { route: language },
+            metadata: { route: options?.language },
             subject,
         }
 
