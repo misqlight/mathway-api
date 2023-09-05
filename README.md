@@ -57,6 +57,22 @@ console.log((await mathway.greet('precalculus', { language: 'es' })).messages[0]
 // Output is: ¿Cómo puedo ayudarte?
 ```
 
+### function `getGlossaryTerm`
+Get glossary term definition. Arguments:
+- `termId` - ID of the term
+
+Return value is a definition string.\
+Can throw an error which is a string with the error message.
+
+Example:
+```javascript
+mathway.getGlossaryTerm(416).then(definition => {
+    console.log("Definition:", definition);
+}).catch(errorMessage => {
+    console.error("Error:", errorMessage);
+});
+```
+
 ### object `MessagesResponse`
 - `type` - always `"messagesResponse"`
 - `messages` - Array of `Message`. Messages related to the provided request

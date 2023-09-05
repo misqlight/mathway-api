@@ -191,6 +191,29 @@ async function greet(subject, options = {}) {
     });
 }
 
+/**
+ * Get glossary term definition
+ * 
+ * @public
+ * @param {string|number} termId - Term ID
+ * @returns {Promise<string>}
+ */
+async function getGlossaryTerm(termId) {
+    return new Promise(async (resolve, reject) => {
+        const response = await sendRequest({
+            method: "GET",
+            hostname: "www.mathway.com",
+            path: "/localsolver/rest/getGlossaryDefinition/" + termId,
+            headers: { "Referer": "https://www.mathway.com/" }
+        });
+
+        if (response.status === 1)
+            resolve(response.definition);
+        else reject(response.message);
+    });
+}
+
 module.exports.submit = submit;
 module.exports.getTopicResult = getTopicResult;
 module.exports.greet = greet;
+module.exports.getGlossaryTerm = getGlossaryTerm;
