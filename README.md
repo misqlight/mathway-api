@@ -6,6 +6,7 @@ To use the package import it using `require` keyword:
 ```javascript
 const mathway = require("mathway-api");
 ```
+---
 ### function `submit`
 Submit an expression to MathWay and return the response. Arguments:
 - `expression` - Expression to submit (in LaTeX format)
@@ -25,6 +26,7 @@ mathway.submit('\\sqrt(16) + x = 5', 'algebra', { language: 'en' }).then(answer 
     }
 });
 ```
+---
 ### function `getTopicResult`
 Get an MessagesResponse result for given topic manually. Arguments:
 - `expression` - Expression to submit (in LaTeX format)
@@ -42,7 +44,7 @@ Example:
 const topicId = 1; // ID of the "Solve for x" topic
 const answer = await mathway.getTopicResult('x + 1 = 2', 'algebra', topicId);
 ```
-
+---
 ### function `greet`
 Sends greeting request to MathWay. Arguments:
 - `subject` - Answers subject (See all subjects list below)
@@ -56,7 +58,7 @@ Example:
 console.log((await mathway.greet('precalculus', { language: 'es' })).messages[0].content);
 // Output is: ¿Cómo puedo ayudarte?
 ```
-
+---
 ### function `getGlossaryTerm`
 Get glossary term definition. Arguments:
 - `termId` - ID of the term
@@ -72,15 +74,15 @@ mathway.getGlossaryTerm(416).then(definition => {
     console.error("Error:", errorMessage);
 });
 ```
-
+---
 ### object `MessagesResponse`
 - `type` - always `"messagesResponse"`
 - `messages` - Array of `Message`. Messages related to the provided request
-
+---
 ### object `TopicsResponse`
 - `type` - always `"topicsResponse"`
 - `topics` - Array of `Topic`. Array of suggested topics
-
+---
 ### object `Message`
 - `content` - String.  Content of the message (with HTML tags)
 - `genre` - Genre/Type of the message
@@ -90,14 +92,14 @@ mathway.getGlossaryTerm(416).then(definition => {
     - `greeting` - Greeting messages
     - `rating` - Messages asking to rate the solution
 - `timestamp` - Message timestamp
-
+---
 ### object `Topic`
 - `id` - Number. Unique ID of the topic.
 - `score` - Number. Number between 0 and 1. Probability that this topic was meant.
 - `text` - String. Topic text.
 - function `getResult` - shorthand for `getTopicResult` call with current topic. Just use `getResult()` instead of `getTopicResult(expression, subject, topicId, language)`.
 - `customData` - Optional, Object. Custom topic data (e.g. `variable` to specify what variable to act with)
-
+---
 ### Supported subjects
 - `BasicMath`
 - `prealgebra`
@@ -110,7 +112,6 @@ mathway.getGlossaryTerm(416).then(definition => {
 - `linearalgebra`
 - `chemistry`
 - `physics`
-
 
 ### Supported languages
 |  Language  | 2-letter code |
