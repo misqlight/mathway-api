@@ -1,6 +1,7 @@
 const http = require('node:https');
 
 /** @typedef {"BasicMath"|"prealgebra"|"algebra"|"trigonometry"|"precalculus"|"calculus"|"statistics"|"finitemath"|"linearalgebra"|"chemistry"|"physics"} Subject */
+/** @typedef {"mathway"|"message"|"autoresolve"|"greeting"|"rating"|"survey"} MessageGenre */
 
 /**
  * @callback getResultByTopicFunction
@@ -20,7 +21,7 @@ const http = require('node:https');
 /**
  * @typedef {object} Message
  * @property {string} content - Content of the message (with HTML tags)
- * @property {"mathway"|"message"|"autoresolve"|"greeting"|"rating"} genre - Genre/Type of the message
+ * @property {MessageGenre} genre - Genre/Type of the message
  * @property {number} timestamp - Timestamp of the message
  */
 
