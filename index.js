@@ -23,6 +23,7 @@ const http = require('node:https');
  * @property {string} content - Content of the message (with HTML tags)
  * @property {MessageGenre} genre - Genre/Type of the message
  * @property {number} timestamp - Timestamp of the message
+ * @property {"ViewSteps"|"OpenGraph"} [callout]
  */
 
 /** 
@@ -147,6 +148,7 @@ async function getTopicResult(expression, subject, topicId, options = {}) {
                 content: msg.content,
                 genre: msg.genre,
                 timestamp: msg.timestamp,
+                callout: msg.callout,
             }
         });
 
