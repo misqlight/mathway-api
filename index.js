@@ -103,7 +103,7 @@ async function submit(expression, subject, options = {}) {
                     score: topic.Score,
                     text: topic.Text,
                     customData: { variable: topic.CustomData.VAR },
-                    getResult: () => getTopicResult(expression, subject, topic.Id, { customData: { variable: topic.CustomData.VAR }, language }),
+                    getResult: () => getTopicResult(expression, subject, topic.Id, { customData: { variable: topic.CustomData.VAR } }, options?.language),
                 }
             });
         }
