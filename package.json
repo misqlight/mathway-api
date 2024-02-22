@@ -1,6 +1,6 @@
 {
   "name": "mathway-api",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Node.js package that provides an unofficial API for MathWay",
   "main": "index.js",
   "scripts": {
